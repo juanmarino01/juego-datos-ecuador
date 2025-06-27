@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Juego de Protección de Datos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    }
+    .question {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+    }
+    .options label {
+      display: block;
+      margin-bottom: 10px;
+    }
+    button {
+      background: #0066cc;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin-top: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="quiz">
+      <div class="question" id="question"></div>
+      <div class="options" id="options"></div>
+      <button onclick="nextQuestion()">Siguiente</button>
+      <div class="result" id="result"></div>
+    </div>
+  </div>
+
+  <script>
+    const quiz = [
+      {
+        question: "¿Qué derecho garantiza el artículo 66 numeral 19 de la Constitución del Ecuador?",
+        options: ["Libertad de expresión", "Protección de datos personales", "Acceso a la información", "Derecho a la educación"],
+        answer: 1
+      },
+      {
+        question: "¿Cuál de estos es un dato sensible?",
+        options: ["Nombre", "Dirección", "Afiliación política", "Número de cédula"],
+        answer: 2
+      },
+      {
+        question: "¿Qué técnica impide identificar directamente a una persona con sus datos?",
+        options: ["Anonimización", "Indexación", "Digitalización", "Compilación"],
+        answer: 0
+      },
+      {
+        question: "¿Qué organismo fiscaliza la protección de datos personales en Ecuador?",
+        options: ["Ministerio de Justicia", "Corte Constitucional", "Autoridad de Protección de Datos Personales", "Asamblea Nacional"],
+        answer: 2
+      }
+    ];
+
+    let current = 0;
+    let score = 0;
+
+    function loadQuestion() {
+      document.getElementById("result").textContent = "";
+      const q = quiz[current];
+      document.getElementById("question").textContent = q.question;
+      const optionsDiv = document.getElementById("options");
+      optionsDiv.innerHTML = "";
+      q.options.forEach((opt, index) => {
+        const label = document.createElement("label");
+        label.innerHTML = `<input type='radio' name='option' value='${index}'> ${opt}`;
+        optionsDiv.appendChild(label);
+      });
+    }
+
+    function nextQuestion() {
+      const selected = document.querySelector('input[name="option"]:checked');
+      if (!selected) {
+        alert("Por favor selecciona una opción.");
+        return;
+      }
+      if (parseInt(selected.value) === quiz[current].answer) {
+        score++;
+      }
+      current++;
+      if (current < quiz.length) {
+        loadQuestion();
+      } else {
+        document.getElementById("quiz").innerHTML = `<h2>Juego terminado</h2><p>Tu puntuación fue: ${score} de ${quiz.length}</p>`;
+      }
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>
